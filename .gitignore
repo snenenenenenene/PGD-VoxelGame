@@ -1,0 +1,7 @@
+.vs
+.vscode
+Logs
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp.csproj
+PDG.sln
+Library/
