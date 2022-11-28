@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 public class ChunkMeshCreator : MonoBehaviour
 {
 
+    public class CreateMesh {
+        public int[,,] DataToDraw;
+        public System.Action<Mesh> OnComplete;
+    }
+
     public class FaceData {
         public FaceData(Vector3[] verts, int[] tris, int[] uvindexorder)
     {
@@ -135,10 +140,18 @@ static readonly int[] ZUVOrder = new int[]
 #endregion
     private Dictionary<Vector3Int, FaceData> CubeFaces = new Dictionary<Vector3Int, FaceData>();
 private TextureLoader TextureLoaderInstance;
-    public ChunkMeshCreator(TextureLoader textureLoaderInstance)
+private TerrainGenerator Generator;
+private Queue<CreateMesh> MeshesToCreate;
+public bool Terminate;
+
+
+    public ChunkMeshCreator(TextureLoader textureLoaderInstance, TerrainGenerator terrainGen)
     {
+        CubeFaces = new Dictionary<Vector3Int, FaceData>();
         TextureLoaderInstance = textureLoaderInstance;
         CubeFaces = new Dictionary<Vector3Int, FaceData>();
+        Generator = terrainGen;
+        MeshesToCreate = new Queue<CreateMesh>();
 
         for (int i = 0; i < CheckDirections.Length; i++)
         {
@@ -161,7 +174,26 @@ private TextureLoader TextureLoaderInstance;
             {
                 CubeFaces.Add(CheckDirections[i], new FaceData(RightFace, RightTris, XUVOrder));
             }
-                }
+        }
+        Generator.StartCoroutine(MeshGenLoop());
+    }
+
+    public void QueueDataToDraw(CreateMesh createMeshData) {
+        MeshesToCreate.Enqueue(createMeshData);
+    }
+
+    public IEnumerator MeshGenLoop() {
+        while (Terminate == false)
+        {
+            if (MeshesToCreate.Count > 0)
+             {
+                CreateMesh createMesh = MeshesToCreate.Dequeue();
+                yield return Generator.StartCoroutine(CreateMeshFromData(createMesh.DataToDraw, createMesh.OnComplete));
+             }
+
+            yield return null;
+
+        }
     }
 
     public IEnumerator CreateMeshFromData(int[,,] Data, System.Action<Mesh> callback)
