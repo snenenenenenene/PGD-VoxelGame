@@ -21,19 +21,20 @@ public class InfiniteTerrainGenerator : MonoBehaviour
 
     void Update()
     {
-        int plrChunkX = (int)Player.position.x/TerrainGenerator.ChunkSize.x;
-        int plrChunky = (int)Player.position.z/TerrainGenerator.ChunkSize.z;
+        int plrChunkX = (int)Player.position.x / TerrainGenerator.ChunkSize.x;
+        int plrChunky = (int)Player.position.z / TerrainGenerator.ChunkSize.z;
         CoordsToRemove.Clear();
 
-        foreach(KeyValuePair<Vector2Int, GameObject> activeChunk in TerrainGenerator.ActiveChunks) {
+        foreach (KeyValuePair<Vector2Int, GameObject> activeChunk in TerrainGenerator.ActiveChunks)
+        {
             // if (Chunk.Key.x < plrChunkX - RenderDistance || Chunk.Key.x > plrChunkX + RenderDistance || Chunk.Key.y < plrChunky - RenderDistance || Chunk.Key.y > plrChunky + RenderDistance) {
-                CoordsToRemove.Add(activeChunk.Key);
+            CoordsToRemove.Add(activeChunk.Key);
             // }
         }
 
         for (int x = plrChunkX - RenderDistance; x <= plrChunkX + RenderDistance; x++)
         {
-            for (int y = plrChunky- RenderDistance; y <= plrChunky + RenderDistance; y++)
+            for (int y = plrChunky - RenderDistance; y <= plrChunky + RenderDistance; y++)
             {
                 Vector2Int chunkCoord = new Vector2Int(x, y);
                 if (!TerrainGenerator.ActiveChunks.ContainsKey(chunkCoord))
@@ -44,13 +45,12 @@ public class InfiniteTerrainGenerator : MonoBehaviour
 
             }
         }
-    foreach (Vector2Int coord in CoordsToRemove)
-    {
+        foreach (Vector2Int coord in CoordsToRemove)
+        {
 
-        GameObject chunkToDelete = TerrainGenerator.ActiveChunks[coord];
-        TerrainGenerator.ActiveChunks.Remove(coord);
-        Destroy(chunkToDelete);
+            // GameObject chunkToDelete = TerrainGenerator.ActiveChunks[coord];
+            TerrainGenerator.ActiveChunks.Remove(coord);
+            // Destroy(chunkToDelete);
+        }
     }
-    }
-
 }

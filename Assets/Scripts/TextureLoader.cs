@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TextureLoader : MonoBehaviour
-{    [System.Serializable]
+{
+    [System.Serializable]
     public class CubeTexture
     {
         public string TextureName;
@@ -76,8 +77,6 @@ public class TextureLoader : MonoBehaviour
                 return YTextureT.Length > 0 ? YTextureT : SpecificFaceTextures.UpT;
             else if (Direction == Vector3Int.down)
                 return YTextureT.Length > 0 ? YTextureT : SpecificFaceTextures.DownT;
-
-            Debug.Log("Nil");
             return null;
         }
 
@@ -85,7 +84,7 @@ public class TextureLoader : MonoBehaviour
         {
             if (Direction == Vector3Int.forward)
                 return ZTexture != null ? ZTexture.uv : SpecificFaceTextures.Forward.uv;
-            else if(Direction == Vector3Int.back)
+            else if (Direction == Vector3Int.back)
                 return ZTexture != null ? ZTexture.uv : SpecificFaceTextures.Back.uv;
 
             if (Direction == Vector3Int.right)
@@ -95,7 +94,7 @@ public class TextureLoader : MonoBehaviour
 
             if (Direction == Vector3Int.up)
                 return YTexture != null ? YTexture.uv : SpecificFaceTextures.Up.uv;
-            else if(Direction == Vector3Int.down)
+            else if (Direction == Vector3Int.down)
                 return YTexture != null ? YTexture.uv : SpecificFaceTextures.Down.uv;
 
             return null;
@@ -111,7 +110,7 @@ public class TextureLoader : MonoBehaviour
     {
         Textures = new Dictionary<int, CubeTexture>();
 
-        for(int i = 0; i < CubeTextures.Length; i++)
+        for (int i = 0; i < CubeTextures.Length; i++)
         {
             CubeTextures[i].InitThreadSafeData();
             Textures.Add(i + 1, CubeTextures[i]);
